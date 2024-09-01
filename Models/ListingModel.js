@@ -28,6 +28,12 @@ const ListingScema = mongoose.Schema({
     type: String,
     require: true,
   },
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
 });
 
 const Listing = mongoose.model("Listing", ListingScema);
