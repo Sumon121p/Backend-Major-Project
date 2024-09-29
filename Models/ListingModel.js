@@ -34,6 +34,10 @@ const ListingScema = mongoose.Schema({
       ref: "Review",
     },
   ],
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  }
 });
 
 const Listing = mongoose.model("Listing", ListingScema);
