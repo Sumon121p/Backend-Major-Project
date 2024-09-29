@@ -1,6 +1,6 @@
 const UserModel = require("./../Models/Users");
 
-exports.signup = async (req, res) => {
+exports.signup = async (req, res, next) => {
   try {
     const { email, username, password } = req.body;
     if (!email) {
@@ -19,7 +19,12 @@ exports.signup = async (req, res) => {
     if (existmail.length == 0) {
       const newUser = new UserModel({ email, username });
       const registerUser = await UserModel.register(newUser, password);
-      res.status(200).json({ registerUser });
+      req.login(registerUser, (err) => {
+        if (err) {
+          return next(err);
+        }
+        res.status(200).json({ registerUser });
+      });
     } else {
       return res.status(404).json({ err: "Gmail allready Register" });
     }
@@ -32,13 +37,11 @@ exports.login = async (req, res) => {
   res.status(200).json({ data: "Login Successful" });
 };
 
-exports.logout = async (req,res, next) => {
-  console.log("hlo");
-  return
-  req.logout((err)=>{
-    if(err){
+exports.logout = async (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
       return next(err);
     }
-    res.status(200).json({data: "Logout Sucessful"});
-  })
-}
+    res.status(200).json({ data: "Logout Sucessful" });
+  });
+};

@@ -11,10 +11,19 @@ exports.getList = async () => {
 };
 
 exports.getListById = async (id) => {
-  return await ListMOdel.findById(id).populate({
-    path: "reviews",
-    select: "rating Comment createdAt",
-  });
+  return await ListMOdel.findById(id)
+    .populate({
+      path: "reviews",
+      select: "rating Comment createdAt owner",
+      populate: {
+        path: "owner",
+        select: "username",
+      },
+    })
+    .populate({
+      path: "owner",
+      select: "username",
+    });
 };
 
 exports.updateList = async (id, data) => {
@@ -28,10 +37,10 @@ exports.deleList = async (id) => {
   return await ListMOdel.findByIdAndDelete(id);
 };
 
-exports.review = async (id, data) => {
+exports.review = async (id, data, reveiwOwner) => {
   let Lists = await ListMOdel.findById(id);
   let newReview = new ReveiwModel(data);
-
+  newReview.owner = reveiwOwner;
   await newReview.save();
 
   Lists.reviews.push(newReview);
@@ -39,7 +48,9 @@ exports.review = async (id, data) => {
 };
 
 exports.reviewDelete = async (Reviewid, Listid) => {
-  let list = ListMOdel.findByIdAndUpdate(Listid, {$pull: {reviews : Reviewid}});
+  let list = ListMOdel.findByIdAndUpdate(Listid, {
+    $pull: { reviews: Reviewid },
+  });
   await ReveiwModel.findByIdAndDelete(Reviewid);
   return await list;
 };

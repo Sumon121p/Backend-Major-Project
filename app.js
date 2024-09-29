@@ -45,19 +45,19 @@ mongoose
     console.log(err);
   });
 
-  //Authentication user
+//Authentication user
 
-  app.get("/", (req, res, next)=> {
-    const user = (req.user);
-    if(!user){
-      return res.status(400).json({err: "Unauthorized"})
-    }else{
-      return res.status(200).json(user);
-    }
-  })
+app.get("/", (req, res, next) => {
+  const user = req.user;
+  if (!user) {
+    return res.status(400).json({ err: "Unauthorized" });
+  } else {
+    return res.status(200).json(user);
+  }
+});
 
 app.use("/api/List", require("./Route/ListRouter"));
-app.use("/api/List", require("./Route/UserRoute"));  
+app.use("/", require("./Route/UserRoute"));
 
 app.listen(8080, () => {
   console.log("Server running on 8080");

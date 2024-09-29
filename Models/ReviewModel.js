@@ -13,6 +13,11 @@ const ReveiwSchemaa = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    require: true,
+  }
 });
 
 const ReveiwModel = mongoose.model("Review", ReveiwSchemaa);
