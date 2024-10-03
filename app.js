@@ -7,7 +7,9 @@ const session = require("express-session");
 const LocalStategy = require("passport-local");
 const passport = require("passport");
 const UserModel = require("./Models/Users");
-
+if(process.env.NODE_ENV != "production"){
+  require('dotenv').config();
+}
 const sessionOptions = {
   secret: "mysupersecretcode",
   resave: false,

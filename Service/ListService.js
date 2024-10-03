@@ -26,7 +26,7 @@ exports.getListById = async (id) => {
     });
 };
 
-exports.updateList = async (id, data) => {
+exports.updateList = async (id, data, Listimage) => {
   return await ListMOdel.findByIdAndUpdate(id, data, {
     runValidators: true,
     new: true,

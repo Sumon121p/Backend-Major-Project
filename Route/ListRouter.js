@@ -11,12 +11,13 @@ const {
 } = require("./../Controller/ListingController");
 const { isLoggedin } = require("../Midleware/Auth");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const { storage } = require("../cloudconfig");
+const upload = multer({ storage });
 
-router.post("/", isLoggedin, upload.single("imgLink"), addList);
+router.post("/", isLoggedin, upload.single("image"), addList);
 router.get("/", getList);
 router.get("/:id", isLoggedin, getListById);
-router.put("/:id", isLoggedin, updateList);
+router.put("/:id", isLoggedin, upload.single("image"), updateList);
 router.delete("/:id", isLoggedin, deleList);
 router.post("/listing/:id/review", isLoggedin, reveiw);
 router.delete("/:Listid/review/:Reviewid", isLoggedin, reviewDelete);
