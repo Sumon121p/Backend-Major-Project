@@ -4,11 +4,13 @@ const ListModel = require("./../Models/ListingModel");
 exports.addList = async (req, res) => {
   try {
     const { title, description, image, price, location, country } = req.body;
-
+    const url = req.file.path;
+    const filename = req.file.filename;
     if (!price || isNaN(price)) {
       return res.status(404).json({ err: "price need" });
     }
     const List = await Listing.addList(req.body);
+    List.image = { url, filename };
     List.owner = req.user._id;
     await List.save();
     res.status(200).json(List);
@@ -42,8 +44,14 @@ exports.updateList = async (req, res) => {
       return res.status(400).json({ err: "You don't have permission to edit" });
     }
     const List = await Listing.updateList(req.params.id, req.body);
+    if (req.file) {
+      const url = req.file.path;
+      const filename = req.file.filename;
+      List.image = { url, filename };
+      await List.save();
+    }
     res.status(200).json(List);
-  } catch (err) {
+  } catch (err) { 
     throw err;
   }
 };
