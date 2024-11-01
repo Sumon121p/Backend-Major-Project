@@ -4,13 +4,39 @@ const bodyParser = require("body-parser");
 const app = express();
 const cors = require("cors");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const LocalStategy = require("passport-local");
 const passport = require("passport");
 const UserModel = require("./Models/Users");
-if(process.env.NODE_ENV != "production"){
-  require('dotenv').config();
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
 }
+
+const MONGO_URL = process.env.ATLASDB_URL;
+// const MONGO_URL = "mongodb://localhost:27017/majorproject";
+mongoose
+  .connect(MONGO_URL)
+  .then(() => {
+    console.log("Database connect");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+const store = MongoStore.create({
+  mongoUrl: MONGO_URL,
+  crypto: {
+    secret: "mysupersecretcode",
+  },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", (err) => {
+  console.log("Error in Mongo Session Store", err); 
+});
+
 const sessionOptions = {
+  store,
   secret: "mysupersecretcode",
   resave: false,
   saveUninitialized: true,
@@ -36,16 +62,6 @@ app.use(
     credentials: true,
   })
 );
-
-const MONGO_URL = "mongodb://localhost:27017/majorproject";
-mongoose
-  .connect(MONGO_URL)
-  .then(() => {
-    console.log("Database connect");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 
 //Authentication user
 
