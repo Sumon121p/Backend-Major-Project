@@ -58,7 +58,7 @@ passport.deserializeUser(UserModel.deserializeUser());
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: "http://localhost:5173", // Replace with your frontend URL
+    origin: "https://sp-solution-5rgj.onrender.com", // Replace with your frontend URL
     credentials: true,
   })
 );
