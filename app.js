@@ -44,7 +44,7 @@ const sessionOptions = {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,  // 7 days
     maxAge: 7 * 24 * 60 * 60 * 1000,  // 7 days
     httpOnly: true,  // Prevent client-side JavaScript from accessing the cookie
-    secure: true,    // Ensure the cookie is only sent over HTTPS (for production)
+    secure: process.env.NODE_ENV === "production",    // Ensure the cookie is only sent over HTTPS (for production)
     sameSite: 'None',  // Allow cross-origin cookies (needed for cross-origin authentication)
   },
 };
