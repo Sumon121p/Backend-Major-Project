@@ -41,11 +41,14 @@ const sessionOptions = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,  // 7 days
+    maxAge: 7 * 24 * 60 * 60 * 1000,  // 7 days
+    httpOnly: true,  // Prevent client-side JavaScript from accessing the cookie
+    secure: true,    // Ensure the cookie is only sent over HTTPS (for production)
+    sameSite: 'None',  // Allow cross-origin cookies (needed for cross-origin authentication)
   },
 };
+
 
 app.use(session(sessionOptions));
 app.use(passport.initialize());
